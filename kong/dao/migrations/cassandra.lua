@@ -628,5 +628,22 @@ return {
       CREATE INDEX IF NOT EXISTS ON targets(target);
     ]],
     down = nil
+  },
+  {
+    name = "2018-05-23-142400_api_key",
+    up = [[
+      CREATE TABLE IF NOT EXISTS api_key(
+        id uuid,
+        key uuid,
+        consumer_id uuid,
+        expired_time timestamp,
+        created_at timestamp,
+        PRIMARY KEY (id)
+      );
+
+      CREATE INDEX IF NOT EXISTS ON api_key(key);
+      CREATE INDEX IF NOT EXISTS ON api_key(consumer_id);
+    ]],
+    down = nil
   }
 }

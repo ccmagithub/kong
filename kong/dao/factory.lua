@@ -15,6 +15,7 @@ local CORE_MODELS = {
   "ssl_servers_names",
   "upstreams",
   "targets",
+  "api_key",
 }
 
 -- returns db errors as strings, including the initial `nil`

@@ -39,7 +39,7 @@ function _M.find_by_id_or_field(dao, filter, value, alternate_field)
     return nil, err
   end
 
-  if is_uuid and not next(rows) then
+  if is_uuid and not next(rows) and alternate_field then
     -- it's a uuid, but yielded no results, so retry with the alternate field
     filter.id = nil
     filter[alternate_field] = value
@@ -260,6 +260,21 @@ function _M.delete(primary_keys, dao_collection)
     end
   else
     return responses.send_HTTP_NO_CONTENT()
+  end
+end
+
+function _M.find_api_key_by_id(self, dao_factory, helpers)
+  local rows, err = _M.find_by_id_or_field(dao_factory.api_key, {},
+                                           self.params.id)
+
+  if err then
+    return helpers.yield_error(err)
+  end
+  self.params.id = nil
+
+  self.api_key = rows[1]
+  if not self.api_key then
+    return helpers.responses.send_HTTP_NOT_FOUND()
   end
 end
 
