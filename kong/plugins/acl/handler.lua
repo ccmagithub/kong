@@ -2,15 +2,18 @@ local BasePlugin = require "kong.plugins.base_plugin"
 local responses = require "kong.tools.responses"
 local constants = require "kong.constants"
 local singletons = require "kong.singletons"
+local crud = require "kong.api.crud_helpers"
 local pl_tablex = require "pl.tablex"
 
 local table_concat = table.concat
 local set_header = ngx.req.set_header
+local ngx_get_headers = ngx.req.get_headers
 local ngx_error = ngx.ERR
 local ngx_log = ngx.log
 local EMPTY = pl_tablex.readonly {}
 local BLACK = "BLACK"
 local WHITE = "WHITE"
+
 
 local reverse_cache = setmetatable({}, { __mode = "k" })
 
@@ -33,49 +36,52 @@ function ACLHandler:new()
   ACLHandler.super.new(self, "acl")
 end
 
-local function load_acls_into_memory(consumer_id)
-  local results, err = singletons.dao.acls:find_all {consumer_id = consumer_id}
+local function load_acls_into_memory(key_id)
+  local results, err = singletons.dao.acls:find_all {key_id = key_id}
   if err then
     return nil, err
   end
   return results
 end
 
+-- check service acl authentication
 function ACLHandler:access(conf)
   ACLHandler.super.access(self)
+  local headers = ngx_get_headers()
+  -- search in headers & querystring
+  local apikey = headers["x-api-key"]
 
-  local consumer_id
-  local ctx = ngx.ctx
-
-  local authenticated_consumer = ctx.authenticated_consumer
-  if authenticated_consumer then
-    consumer_id = authenticated_consumer.id
+  if type(apikey) ~= "string" then
+    ngx_log(ngx_error, "[acl plugin] need header [x-api-key] but not supply")
+    return responses.send_HTTP_UNAUTHORIZED("Your request is unauthorized")
   end
 
-  if not consumer_id then
-    local authenticated_credential = ctx.authenticated_credential
-    if authenticated_credential then
-      consumer_id = authenticated_credential.consumer_id
-    end
+  -- find primary key id at api_key table by posted apikey value 
+  local apikeyrows, err = crud.find_by_id_or_field(singletons.dao.api_key, 
+                                        { key = apikey }, apikey, "key")
+  if err then
+    return responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
   end
-
-  if not consumer_id then
-    ngx_log(ngx_error, "[acl plugin] Cannot identify the consumer, add an ",
-                       "authentication plugin to use the ACL plugin")
-    return responses.send_HTTP_FORBIDDEN("You cannot consume this service")
+  -- not find any data at api_key table by filter this key=apikey
+  -- return UNAUTHORIZED
+  if next(apikeyrows) == nil then
+    return responses.send_HTTP_UNAUTHORIZED("Your request is unauthorized")
   end
 
   -- Retrieve ACL
-  local cache_key = singletons.dao.acls:cache_key(consumer_id)
+  -- use primary key id at api_key table to find this key_id data at acls table
+  local cache_key = singletons.dao.acls:cache_key(apikeyrows[1].id)
   local acls, err = singletons.cache:get(cache_key, nil,
-                                         load_acls_into_memory, consumer_id)
+                                         load_acls_into_memory, apikeyrows[1].id)
+
   if err then
     return responses.send_HTTP_INTERNAL_SERVER_ERROR(err)
   end
   if not acls then
     acls = EMPTY
   end
-
+  
+  -- check group
   -- build and cache a reverse-lookup table from our plugins 'conf' table
   local reverse = reverse_cache[conf]
   if not reverse then
@@ -88,6 +94,7 @@ function ACLHandler:access(conf)
     -- cache by 'conf', the cache has weak keys, so invalidation of the
     -- plugin 'conf' will also remove it from our local cache here
     reverse_cache[conf] = reverse
+    
     -- build reverse tables for quick lookup
     if reverse.type == BLACK then
       for i = 1, #(conf.blacklist or EMPTY) do
@@ -109,6 +116,7 @@ function ACLHandler:access(conf)
     -- not have any groups. In that case 'acls == EMPTY' so all those users
     -- will be indexed by that table, which is ok, as their result is the
     -- same as well.
+    
     reverse.consumer_access = setmetatable({}, { __mode = "k" })
   end
 
@@ -157,7 +165,17 @@ function ACLHandler:access(conf)
   end
 
   if cached_block == true then -- NOTE: we only catch the boolean here!
-    return responses.send_HTTP_FORBIDDEN("You cannot consume this service")
+
+    return responses.send_HTTP_UNAUTHORIZED("Your request is unauthorized")
+  end
+
+  -- check key expired_time that from api_key table of posted key
+  local expired_time = apikeyrows[1].expired_time or 0 
+  -- os.time() will get milliseconds ,
+  -- but our expired_time get seconds ,
+  -- so os.time() there has to *1000 to compare with expired_time
+  if expired_time < os.time()*1000 then
+    return responses.send_HTTP_UNAUTHORIZED("Your request is unauthorized. Key is expired.")
   end
 
   set_header(constants.HEADERS.CONSUMER_GROUPS, cached_block)

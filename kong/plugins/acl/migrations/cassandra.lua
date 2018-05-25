@@ -4,14 +4,14 @@ return {
     up = [[
       CREATE TABLE IF NOT EXISTS acls(
         id uuid,
-        consumer_id uuid,
+        key_id uuid,
         group text,
         created_at timestamp,
         PRIMARY KEY (id)
       );
 
       CREATE INDEX IF NOT EXISTS ON acls(group);
-      CREATE INDEX IF NOT EXISTS acls_consumer_id ON acls(consumer_id);
+      CREATE INDEX IF NOT EXISTS acls_key_id ON acls(key_id);
     ]],
     down = [[
       DROP TABLE acls;
