@@ -2,7 +2,6 @@
 
 [![Build Status][badge-travis-image]][badge-travis-url]
 
-
 # Gemini Developer
 
 Kong is a cloud-native, fast, scalable, and distributed Microservice
