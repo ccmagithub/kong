@@ -2,6 +2,7 @@ local Errors      = require "kong.db.errors"
 local responses   = require "kong.tools.responses"
 local utils       = require "kong.tools.utils"
 local app_helpers = require "lapis.application"
+local singletons  = require "kong.singletons"
 
 
 local escape_uri  = ngx.escape_uri
@@ -146,14 +147,59 @@ local function post_collection_endpoint(schema_name, entity_name,
       self.args.post[entity_name] = { id = parent_entity.id }
     end
 
+    
+    -- add services to db (services table)
     local data, _, err_t = db[schema_name]:insert(self.args.post)
     if err_t then
       return handle_error(err_t)
+
+    else
+      -- auto enable acl plugins only when adding services, so check schema_name == services 
+      if schema_name == "services" then
+        -- make add acl plugin parameter object that plugin table need
+        -- create default group name : group_<servicename> 
+        -- ex: if servicename = 'apple' , groupname will set 'group_apple'
+        -- self.args.post.name here represent servicename
+        local groupname = "group_" .. self.args.post.name 
+        local acl_setting =  {
+          params = {
+            name = "acl",
+            -- data is service's return value after adding sucessfully
+            -- here we need service_id , get it value from data.id  (data.id represent this service id )
+            service_id = data.id, 
+            config = {
+              whitelist = groupname
+            }
+          }
+        }
+
+        -- add ACL Plugin to db (plugin table)
+        local acldata, aclerr_t = singletons.dao.plugins:insert(acl_setting.params)
+        -- when it comes error and still error after retry n times , 
+        -- (now set 3 times or will read from config in future)
+        -- delete this service in service table
+        local retrytime = 0
+        while aclerr_t and retrytime < 3 do
+          acldata, aclerr_t = singletons.dao.plugins:insert(acl_setting.params)
+          retrytime = retrytime + 1     
+        end
+
+        if aclerr_t then
+          -- TODO: composite key support
+          -- use service primary key id to delete this service     
+          _, _, err_t = db[schema_name]:delete({ id = acl_setting.params.service_id })
+          if err_t then
+            return handle_error(err_t)
+          end
+          
+          return handle_error(aclerr_t)          
+        end
+      end
     end
 
     return helpers.responses.send_HTTP_CREATED(data)
   end
-end
+end  
 
 
 -- Generates admin api get entity endpoint functions
@@ -184,6 +230,7 @@ local function get_entity_endpoint(schema_name, entity_has_unique_name,
       end
 
     else
+      
       local id = self.params[parent_schema_name]
 
       -- TODO: composite key support
@@ -293,6 +340,7 @@ local function delete_entity_endpoint(schema_name, entity_has_unique_name,
                                       entity_name, parent_schema_name,
                                       parent_entity_has_unique_name)
   return function(self, db, helpers)
+    
     if not parent_schema_name then
       local id = self.params[schema_name]
 
