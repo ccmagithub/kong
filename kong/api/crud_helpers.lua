@@ -224,10 +224,12 @@ function _M.post_consumer_enable_key(params, dao_factory, post_process)
 
       -- if it still error after retrying 3 times, delete this consumer sync
       if err then
-        local ok, err = dao_factory.consumers:delete(consumer_data.id)
-        if err then
-          return app_helpers.yield_error(err) 
+        local ok, err_t = dao_factory.consumers:delete({ id = consumer_data.id })
+        if err_t then
+          return app_helpers.yield_error(err_t) 
         end
+
+        return app_helpers.yield_error(err)
       end
 
       -- After adding both table successfully , add key column into return data
