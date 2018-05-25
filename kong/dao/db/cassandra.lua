@@ -26,6 +26,14 @@ _M.dao_insert_values = {
   timestamp = function()
     -- return time in UNIT millisecond, and PRECISION millisecond
     return math.floor(timestamp.get_utc_ms())
+  end,
+  expiredtimestamp = function()
+    -- return time in default 6 months later (UNIT millisecond, and PRECISION millisecond)
+    local sec_per_day = 24 * 60 * 60
+    -- now default set 3 days
+    local add_day = 3
+    local total_add_sec = sec_per_day * add_day
+    return math.floor(timestamp.get_utc_ms() + total_add_sec * 1000)
   end
 }
 
@@ -319,7 +327,7 @@ local function serialize_arg(field, value)
     return cassandra.null
   elseif field.type == "id" then
     return cassandra.uuid(value)
-  elseif field.type == "timestamp" then
+  elseif field.type == "timestamp" or field.type == "expiredtimestamp" then
     return cassandra.timestamp(value)
   elseif field.type == "boolean" then
     if type(value) == "boolean" then
