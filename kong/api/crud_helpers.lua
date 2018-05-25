@@ -202,6 +202,42 @@ function _M.post(params, dao_collection, post_process)
   end
 end
 
+-- specific for when adding consumer, auto add key for this consumer 
+function _M.post_consumer_enable_key(params, dao_factory, post_process)
+  -- insert to consumers table
+  local consumer_data, err = dao_factory.consumers:insert(params)
+    if err then
+      return app_helpers.yield_error(err) 
+    else
+      local apikeyparams = {
+        consumer_id = consumer_data.id
+      }
+      -- insert to api_key table
+      local apikey_data, err = dao_factory.api_key:insert(apikeyparams)
+
+      -- when insert api_key table fail, retry 3 times
+      local retrytime = 0
+      while err and retrytime < 3 do
+        apikey_data, err = dao_factory.api_key:insert(apikeyparams)
+        retrytime = retrytime + 1     
+      end
+
+      -- if it still error after retrying 3 times, delete this consumer sync
+      if err then
+        local ok, err = dao_factory.consumers:delete(consumer_data.id)
+        if err then
+          return app_helpers.yield_error(err) 
+        end
+      end
+
+      -- After adding both table successfully , add key column into return data
+      -- let consumer knows which key they can use
+      local return_data = consumer_data
+      return_data.key = apikey_data.key
+      return responses.send_HTTP_CREATED(post_process_row(return_data, post_process))
+    end
+end
+
 --- Partial update of an entity.
 -- Filter keys must be given to get the row to update.
 function _M.patch(params, dao_collection, filter_keys, post_process)
