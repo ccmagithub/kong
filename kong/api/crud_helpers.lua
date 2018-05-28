@@ -311,11 +311,23 @@ function _M.delete_consumer_remove_key(primary_keys, dao_collection)
       return responses.send_HTTP_NOT_FOUND()
     end
   else
-    local apikey_ok, err = _M.find_by_id_or_field(dao_collection.api_key, 
+    local apikey_data, err = _M.find_by_id_or_field(dao_collection.api_key, 
                                         { consumer_id = primary_keys.id }, primary_keys.id, "consumer_id")
+    
     -- if this consumer has api_key , also delete consumer's key
-    if next(apikey_ok) ~= nil then
-      apikey_ok, err = dao_collection.api_key:delete({id = apikey_ok[1].id})
+    if next(apikey_data) ~= nil then
+      for i = 1,#apikey_data do
+        local apikey_del_ok, err = dao_collection.api_key:delete({id = apikey_data[i].id})
+        local acls_data , err = _M.find_by_id_or_field(dao_collection.acls, 
+                                        { key_id = apikey_data[i].id }, apikey_data[i].id, "key_id")
+
+        -- if this api_key exist in acls , also delete related key_id
+        if next(acls_data) ~= nil then
+          for j = 1,#acls_data do
+            local acls_ok,err = dao_collection.acls:delete({id = acls_data[j].id})            
+          end       
+        end
+      end
     end
 
     return responses.send_HTTP_NO_CONTENT()
