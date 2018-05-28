@@ -32,7 +32,10 @@ return {
     end,
 
     DELETE = function(self, dao_factory)
-      crud.delete(self.consumer, dao_factory.consumers)
+      -- need to delete consumer & consumer's api_key
+      -- function delete_consumer_remove_key will delete two different table (consumers & api_key),
+      -- so we post "dao_factory" params instead of "dao_factory.consumers" 
+      crud.delete_consumer_remove_key(self.consumer, dao_factory)
     end
   },
 

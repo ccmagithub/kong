@@ -301,6 +301,27 @@ function _M.delete(primary_keys, dao_collection)
   end
 end
 
+-- delete consumer and also delete consumers key
+function _M.delete_consumer_remove_key(primary_keys, dao_collection)
+  local ok, err = dao_collection.consumers:delete(primary_keys)
+  if not ok then
+    if err then
+      return app_helpers.yield_error(err)
+    else
+      return responses.send_HTTP_NOT_FOUND()
+    end
+  else
+    local apikey_ok, err = _M.find_by_id_or_field(dao_collection.api_key, 
+                                        { consumer_id = primary_keys.id }, primary_keys.id, "consumer_id")
+    -- if this consumer has api_key , also delete consumer's key
+    if next(apikey_ok) ~= nil then
+      apikey_ok, err = dao_collection.api_key:delete({id = apikey_ok[1].id})
+    end
+
+    return responses.send_HTTP_NO_CONTENT()
+  end
+end
+
 function _M.find_api_key_by_id(self, dao_factory, helpers)
   local rows, err = _M.find_by_id_or_field(dao_factory.api_key, {},
                                            self.params.id)
