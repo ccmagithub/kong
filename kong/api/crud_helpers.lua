@@ -206,38 +206,39 @@ end
 function _M.post_consumer_enable_key(params, dao_factory, post_process)
   -- insert to consumers table
   local consumer_data, err = dao_factory.consumers:insert(params)
-    if err then
-      return app_helpers.yield_error(err) 
-    else
-      local apikeyparams = {
-        consumer_id = consumer_data.id
-      }
-      -- insert to api_key table
-      local apikey_data, err = dao_factory.api_key:insert(apikeyparams)
+  if err then
+    return app_helpers.yield_error(err) 
+  end
 
-      -- when insert api_key table fail, retry 3 times
-      local retrytime = 0
-      while err and retrytime < 3 do
-        apikey_data, err = dao_factory.api_key:insert(apikeyparams)
-        retrytime = retrytime + 1     
-      end
+  local apikeyparams = {
+    consumer_id = consumer_data.id
+  }
+  -- insert to api_key table
+  local apikey_data, err = dao_factory.api_key:insert(apikeyparams)
 
-      -- if it still error after retrying 3 times, delete this consumer sync
-      if err then
-        local ok, err_t = dao_factory.consumers:delete({ id = consumer_data.id })
-        if err_t then
-          return app_helpers.yield_error(err_t) 
-        end
+  -- when insert api_key table fail, retry 3 times
+  local retrytime = 0
+  while err and retrytime < 3 do
+    apikey_data, err = dao_factory.api_key:insert(apikeyparams)
+    retrytime = retrytime + 1     
+  end
 
-        return app_helpers.yield_error(err)
-      end
-
-      -- After adding both table successfully , add key column into return data
-      -- let consumer knows which key they can use
-      local return_data = consumer_data
-      return_data.key = apikey_data.key
-      return responses.send_HTTP_CREATED(post_process_row(return_data, post_process))
+  -- if it still error after retrying 3 times, delete this consumer sync
+  if err then
+    local ok, err_t = dao_factory.consumers:delete({ id = consumer_data.id })
+    if err_t then
+      return app_helpers.yield_error(err_t) 
     end
+
+    return app_helpers.yield_error(err)
+  end
+
+  -- After adding both table successfully , add key column into return data
+  -- let consumer knows which key they can use
+  local return_data = consumer_data
+  return_data.key = apikey_data.key
+
+  return responses.send_HTTP_CREATED(post_process_row(return_data, post_process))
 end
 
 --- Partial update of an entity.
@@ -293,12 +294,12 @@ function _M.delete(primary_keys, dao_collection)
   if not ok then
     if err then
       return app_helpers.yield_error(err)
-    else
-      return responses.send_HTTP_NOT_FOUND()
     end
-  else
-    return responses.send_HTTP_NO_CONTENT()
+
+    return responses.send_HTTP_NOT_FOUND()
   end
+
+  return responses.send_HTTP_NO_CONTENT()
 end
 
 -- delete consumer and also delete consumers key
@@ -307,31 +308,31 @@ function _M.delete_consumer_remove_key(primary_keys, dao_collection)
   if not ok then
     if err then
       return app_helpers.yield_error(err)
-    else
-      return responses.send_HTTP_NOT_FOUND()
     end
-  else
-    local apikey_data, err = _M.find_by_id_or_field(dao_collection.api_key, 
-                                        { consumer_id = primary_keys.id }, primary_keys.id, "consumer_id")
-    
-    -- if this consumer has api_key , also delete consumer's key
-    if next(apikey_data) ~= nil then
-      for i = 1,#apikey_data do
-        local apikey_del_ok, err = dao_collection.api_key:delete({id = apikey_data[i].id})
-        local acls_data , err = _M.find_by_id_or_field(dao_collection.acls, 
-                                        { key_id = apikey_data[i].id }, apikey_data[i].id, "key_id")
 
-        -- if this api_key exist in acls , also delete related key_id
-        if next(acls_data) ~= nil then
-          for j = 1,#acls_data do
-            local acls_ok,err = dao_collection.acls:delete({id = acls_data[j].id})            
-          end       
-        end
+    return responses.send_HTTP_NOT_FOUND()
+  end
+
+  local apikey_data, err = _M.find_by_id_or_field(dao_collection.api_key, 
+                                      { consumer_id = primary_keys.id }, primary_keys.id, "consumer_id")
+  
+  -- if this consumer has api_key , also delete consumer's key
+  if next(apikey_data) ~= nil then
+    for i = 1,#apikey_data do
+      local apikey_del_ok, err = dao_collection.api_key:delete({id = apikey_data[i].id})
+      local acls_data , err = _M.find_by_id_or_field(dao_collection.acls, 
+                                      { key_id = apikey_data[i].id }, apikey_data[i].id, "key_id")
+
+      -- if this api_key exist in acls , also delete related key_id
+      if next(acls_data) ~= nil then
+        for j = 1,#acls_data do
+          local acls_ok,err = dao_collection.acls:delete({id = acls_data[j].id})            
+        end       
       end
     end
-
-    return responses.send_HTTP_NO_CONTENT()
   end
+
+  return responses.send_HTTP_NO_CONTENT()
 end
 
 function _M.find_api_key_by_id(self, dao_factory, helpers)
