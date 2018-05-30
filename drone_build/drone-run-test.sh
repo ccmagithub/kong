@@ -16,8 +16,11 @@ docker run -d --rm --name kong-database \
     cassandra:3
 
 # wait for cassandra service up
-while [[ -z $(docker exec -it kong-database cqlsh -e 'describe keyspaces' | grep system) ]]; do
+timeout=0
+while [[ -z $(docker exec -i kong-database cqlsh -e 'describe keyspaces' | grep system) ]]; do
     sleep 3
+    timeout=$[$timeout+3]
+    ((timeout >= 300)) && break
 done
 
 echo -e "\n<-- start to do db migration -->"
