@@ -16,7 +16,7 @@ docker run -d --rm --name kong-database \
     cassandra:3
 
 # wait for cassandra service up
-while [[ $(docker exec -it kong-database nodetool netstats | grep 'Mode') != *"NORMAL"* ]]; do
+while [[ -z $(docker exec -it kong-database cqlsh -e 'describe keyspaces' | grep system) ]]; do
     sleep 3
 done
 
