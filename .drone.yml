@@ -2,34 +2,51 @@ matrix:
   VERSION:
     - 0.1.0
 pipeline:
-  # build env
-  run-tests-in-compose:
+  env_setup:
     image: michalpodeszwa/docker-compose:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - ./drone_build/drone-run-test.sh
     when:
-      event: [push, pull_request, tag, deployment]
+      event: [push, tag, deployment]
       branch: gemini_developer
-  copy-code:
+
+
+  test:
     image: michalpodeszwa/docker-compose:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/gemini/drone/release:/release/
     commands:
-      - docker exec kong curl http://localhost:8001/consumers_test/
-      - docker cp kong kong:/usr/local/share/lua/5.1
-      - docker exec kong kong reload
+      - docker exec kong curl http://localhost:8001/
+    when:
+      event: [push, tag, deployment]
+      branch: gemini_developer
+
+
+  build:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/gemini/drone/release:/release/
+    commands:
       - cp -r kong build/Resources/usr/local/share/lua/5.1
       - cd build
       - docker build -t "API_GW:${VERSION}" --network="host" .
       - export TIMESTAMP=$(date +"%Y-%m-%d_%H%M")
       - docker save API_GW:${VERSION} > /release/${TIMESTAMP}_API_Gateway_${VERSION}_${DRONE_BRANCH}_${DRONE_COMMIT}.tar
-  delete-test-env:
+    when:
+      event: [push, tag, deployment]
+      branch: gemini_developer
+
+
+  env_destroy:
     image: michalpodeszwa/docker-compose:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     commands:
-      - docker exec kong curl http://localhost:8001/consumers_test/
       - ./drone_build/drone-delete-test.sh
+    when:
+      event: [push, tag, deployment]
+      branch: gemini_developer
