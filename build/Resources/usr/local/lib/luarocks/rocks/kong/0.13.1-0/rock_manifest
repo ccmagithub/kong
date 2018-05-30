@@ -1,0 +1,384 @@
+rock_manifest = {
+   doc = {
+      ["CHANGELOG.md"] = "fe6ac82922952ca359702b14f98e4c97",
+      ["CODE_OF_CONDUCT.md"] = "77a3cb4365931e912b6bd95f8de69933",
+      ["CONTRIBUTING.md"] = "6a749c6ec3d4a92323770ac2595d4e99",
+      LICENSE = "7cdc93194cd6031d831db2338e7dd0ad",
+      ["README.md"] = "7296af58da9709836db3c941ae65b89b",
+      ["UPGRADE.md"] = "0ab109842891fd18cca30c24f29e70d0"
+   },
+   ["kong-0.13.1-0.rockspec"] = "e7039e6a0760e6ccdd16fe43a201d644",
+   lua = {
+      kong = {
+         api = {
+            ["api_helpers.lua"] = "bfdc664433f8ed830f22b70a3402c471",
+            ["arguments.lua"] = "1ebc4e18f934bfe3c09e8a3c90205c3b",
+            ["crud_helpers.lua"] = "eaaab120476772f4e5da189d778b8f21",
+            ["endpoints.lua"] = "e984e3a0a2591d40067753d12d998b5d",
+            ["init.lua"] = "2d4fc29f3fc4260279e4f024249b3338",
+            routes = {
+               ["apis.lua"] = "84273260d1f1c1bf570e2f6d8d0ee311",
+               ["cache.lua"] = "4685ef19d4c507be5e5d034aaeef9375",
+               ["certificates.lua"] = "3ccf12dc301eaaa5bc3edacca729130e",
+               ["consumers.lua"] = "2a014188202b97edbb48c136a239bcad",
+               ["kong.lua"] = "66e4462dfd2692a0a892ec455c4fc10f",
+               ["plugins.lua"] = "275ab9f8dd6712b89cdb35c49977ab2e",
+               ["routes.lua"] = "730671cb7109ccc0d9d0273b54b4c2bd",
+               ["services.lua"] = "ced0e1fd3b0702daffae5cba8d7384b7",
+               ["snis.lua"] = "c483023b7f8fad214eafe4211e6622cd",
+               ["upstreams.lua"] = "f02b215688cb621fb757251de86affad"
+            }
+         },
+         ["cache.lua"] = "e3df409d83a2a4e0fd42ac33e36a875a",
+         cluster_events = {
+            strategies = {
+               ["cassandra.lua"] = "204331bf058caeaf62efd0447bdf1a08",
+               ["postgres.lua"] = "edfca913f691c32f2edbc8577182e5b3"
+            }
+         },
+         ["cluster_events.lua"] = "1a27961247eeb8342c25e18008380c9d",
+         cmd = {
+            ["check.lua"] = "d0ce6275575b72dcd6bb2270bf3d8cd4",
+            ["health.lua"] = "023d59f274deac0e9d333d22c1d90887",
+            ["init.lua"] = "967485f4e1ea91f6d3b047a9776b9db2",
+            ["migrations.lua"] = "2068cdc19de72a823e167a06a56e2ef7",
+            ["prepare.lua"] = "94e7d02e991b67411384169f29a595d2",
+            ["quit.lua"] = "e02f3363c8fe19b1bc13c9ffa098a7d5",
+            ["reload.lua"] = "d4b4fba4cb5678e26b2b1a1f875dfd68",
+            ["restart.lua"] = "d7f89db973cee034f211785cd7336792",
+            ["roar.lua"] = "fbee9d48794177bb53e399acbab8db4d",
+            ["start.lua"] = "8d1d07d515dd4f171c9db9f3fd051a5a",
+            ["stop.lua"] = "832342fdb9033b722b23179368b8e473",
+            utils = {
+               ["kill.lua"] = "3f6ef6b35955b1d758ad86e60ef99f1b",
+               ["log.lua"] = "4e4f4c24a3e5d8477c27a21940b5528f",
+               ["nginx_signals.lua"] = "71aef9d4eaeace940baf6e576bed154f",
+               ["prefix_handler.lua"] = "c1c4fc9c2b203c6c5bace6762c5c8473"
+            },
+            ["version.lua"] = "378cd749fb45b78278fa9c2ea4885a27"
+         },
+         ["conf_loader.lua"] = "db1ebb6a8892beecef4e2d3226be67f4",
+         ["constants.lua"] = "015f3bb9a9df138a60eb4f9406cde687",
+         core = {
+            ["api_router.lua"] = "dca51393d4d41bdb85a82d2ca3868a71",
+            ["balancer.lua"] = "9895a20eee7a3811bcf28d3fb5150cc2",
+            ["certificate.lua"] = "f6495bbc06871254c84ccbad31cc759a",
+            ["error_handlers.lua"] = "18155587b2a27da6ef502a73082b48bc",
+            ["globalpatches.lua"] = "9d13e58af7b02cbfd8fc89ea91e63921",
+            ["handler.lua"] = "d55280ae7d45fc743f19e7eacda85883",
+            ["plugins_iterator.lua"] = "109cb2339f13d1b831de649a03b33254",
+            ["reports.lua"] = "cea23f4a7e2a5388c44d1bb1177c676a",
+            ["router.lua"] = "7fcf9308d46e1e54f6fdb297a13ad73a"
+         },
+         dao = {
+            ["dao.lua"] = "1c14c6a41ceb60afd74c28d946c39ae3",
+            db = {
+               ["cassandra.lua"] = "5b8c192d8398dfe5f0bcecc9666cf754",
+               ["init.lua"] = "673604672f16ffc3cbd09ec23c3574dd",
+               ["postgres.lua"] = "f9ca1dfa67497d5125b13b4d3f8e2d90"
+            },
+            ["errors.lua"] = "e2793d99d2c769f6c4a56c6a8e45c588",
+            ["factory.lua"] = "c4630c6c8ddf163eb5b54bc127bf0004",
+            migrations = {
+               ["cassandra.lua"] = "003114ebd546da82f5efc930226501ca",
+               ["helpers.lua"] = "3f8320dd3016f4304b97c761326728e4",
+               ["postgres.lua"] = "feec985ab73cc7588fef1790480ec9e5"
+            },
+            ["model_factory.lua"] = "a61b2ea2919bcb74d5ee49e575b7927e",
+            schemas = {
+               ["apis.lua"] = "b01b0b220673a1677109186561247573",
+               ["consumers.lua"] = "d3e67093327a5c73dfb9c4b5a1e004cf",
+               ["plugins.lua"] = "dfb4eb7c0214f367b2a84c6c98ba9c2b",
+               ["ssl_certificates.lua"] = "9962aa7236aee838dc0a343a8f49a38b",
+               ["ssl_servers_names.lua"] = "b16d3731140dc492eca2313014e8e7f4",
+               ["targets.lua"] = "67fe8f618434b25c43ff77654643bf14",
+               ["upstreams.lua"] = "5a560d8b54272c5d216bf3030ea47141"
+            },
+            ["schemas_validation.lua"] = "8308a6467ccb457a07b140f958981825"
+         },
+         db = {
+            dao = {
+               ["init.lua"] = "2d6cb593f10ff51a1bf2c4ba42c22a2d"
+            },
+            ["errors.lua"] = "c9fb6fc3b897e80834a58f529276efaa",
+            ["init.lua"] = "81de2229a3463f2db3e6ea4dcda32536",
+            schema = {
+               entities = {
+                  ["routes.lua"] = "092c436b84294eedd7f5e388977053c8",
+                  ["services.lua"] = "ec8473cead71b8bf7b03bfb789ddf156"
+               },
+               ["entity.lua"] = "cce3a9e3e5cb307e9a214356bdda38b3",
+               ["init.lua"] = "24d40610e9c67f2b2d81cf3f0418c7ce",
+               ["metaschema.lua"] = "a6f5c57b1389344e3ea1dc52b97b0011",
+               ["typedefs.lua"] = "5659afcc583ef02e2d44460b42f9321d"
+            },
+            strategies = {
+               cassandra = {
+                  ["connector.lua"] = "28e671a791b9eeee4f8b56c909975209",
+                  ["init.lua"] = "e9dd6b8f514aa70e29ab54432dc1d350",
+                  ["routes.lua"] = "16ba0972813661abca1321c62f39947d",
+                  ["services.lua"] = "d3f9825e0e4670e912629360ff9ddc26"
+               },
+               ["connector.lua"] = "3e5a626fb60803e769e53c4cd08214ae",
+               ["init.lua"] = "7b14b9ebe35c9950842be0789c24eef8",
+               postgres = {
+                  ["connector.lua"] = "ceeea1246d8d65c9e777cc5132db1384",
+                  ["init.lua"] = "45c2e2e9b5be07899d1a367436eae7d0"
+               }
+            }
+         },
+         ["init.lua"] = "8aa0bfb45dbadd39741c97f2dc7728d0",
+         ["meta.lua"] = "947a55c5ef1dcbe8b49bb5f183799c40",
+         plugins = {
+            acl = {
+               ["api.lua"] = "9c3e256e7d267cf14f722e23bb8efc47",
+               ["daos.lua"] = "fe1358f5793dc6fab0b21e229134ecc7",
+               ["handler.lua"] = "fda41148b34e1706f956ff6c8c06d814",
+               migrations = {
+                  ["cassandra.lua"] = "060436a63cee88aca67a649c3a91531b",
+                  ["postgres.lua"] = "e2a19fa82eb572d019b9b34122d1555c"
+               },
+               ["schema.lua"] = "fd1e5f808fabca73d6c46a8061df2cf3"
+            },
+            ["aws-lambda"] = {
+               ["handler.lua"] = "7a407e7231e7f4cf666aa44b932ad240",
+               ["schema.lua"] = "203cda01888303280d815026b9206a2f",
+               ["v4.lua"] = "d2a302408ecd0460c8e64a929f4bd4e9"
+            },
+            ["base_plugin.lua"] = "1c2ffdaa02b7e73f05745bd60897ea7a",
+            ["basic-auth"] = {
+               ["access.lua"] = "dd2bcba88b165282cd0ec6ab7ab0a8e3",
+               ["api.lua"] = "684a6e1d1d00d1aa381dd8aeffe9b463",
+               ["crypto.lua"] = "14294679727b9530e6dd550a2d383884",
+               ["daos.lua"] = "7da60401222e257145c726fd1c531b72",
+               ["handler.lua"] = "8532bc8398408ead2a196a38ec48f6d8",
+               migrations = {
+                  ["cassandra.lua"] = "6234115f579785dc1410c4b758936d38",
+                  ["postgres.lua"] = "2bb5e748cd576204af51a64ec907d9d0"
+               },
+               ["schema.lua"] = "821350b7511cc9d1f5b78f45ed6f7e16"
+            },
+            ["bot-detection"] = {
+               ["handler.lua"] = "543c5b3dfe2d40326576e69e31b5168a",
+               ["rules.lua"] = "be5790ecd5c45742b7fa4a97a361366e",
+               ["schema.lua"] = "6800d766de46aa6479af37d91186a196"
+            },
+            ["correlation-id"] = {
+               ["handler.lua"] = "0fda262b1bccc455a97d51809b760734",
+               ["schema.lua"] = "a7d0dc116b39348408a8bae154aacb6f"
+            },
+            cors = {
+               ["handler.lua"] = "2780e2365ccebb5dbed338f260574057",
+               migrations = {
+                  ["cassandra.lua"] = "285bddfdaf980d90534692611a38606f",
+                  ["postgres.lua"] = "38caef69a2be5d575987c1daf7a30432"
+               },
+               ["schema.lua"] = "568e73cf8d040c2cd74b966617b00bb1"
+            },
+            datadog = {
+               ["handler.lua"] = "8c326d1a1e62817b9f7d5b06e1a790b4",
+               migrations = {
+                  ["cassandra.lua"] = "9ca3db80558070a6276a480f196839d0",
+                  ["postgres.lua"] = "e1c35be8007705faee566a35b36d0cc9"
+               },
+               ["schema.lua"] = "35f0067232ee6b8afd49090f9ce3dd6c",
+               ["statsd_logger.lua"] = "6829b5d40da3f5dbf50749ce987534fb"
+            },
+            ["file-log"] = {
+               ["handler.lua"] = "b8ba260740fb7b2a4785b841d23572b0",
+               ["schema.lua"] = "40499d03bb816aa703496f4747d84a52"
+            },
+            galileo = {
+               ["alf.lua"] = "28605e43387c286915b7a5abf93e3904",
+               ["buffer.lua"] = "2c3e90651c263ede0b50abb14dc1686c",
+               ["handler.lua"] = "3038f7bb5db1dd2d48742ce51eff841f",
+               migrations = {
+                  ["cassandra.lua"] = "8ab7cdb5f067e091e71a156ac984e290",
+                  ["postgres.lua"] = "8ab7cdb5f067e091e71a156ac984e290"
+               },
+               ["schema.lua"] = "0fc54aa9f8194dd05e5f4a99d4ad530d"
+            },
+            ["hmac-auth"] = {
+               ["access.lua"] = "b312a7ee685985a4100b9fcdd4671283",
+               ["api.lua"] = "64c5f9fd57f0ead04f12e50fc42b3b1d",
+               ["daos.lua"] = "e7fdc449fa7da442882228cb0fecb481",
+               ["handler.lua"] = "045a08ed9287a7244aa2a2efa00de1e5",
+               migrations = {
+                  ["cassandra.lua"] = "0fef6c19da643f409a606cfe03908867",
+                  ["postgres.lua"] = "df8fbf2d2c84e14bcf85fb68bec0d8a1"
+               },
+               ["schema.lua"] = "0e654621e7fe7e85755f154f85969585"
+            },
+            ["http-log"] = {
+               ["handler.lua"] = "5310b98c69e733bb4a52edd0745a0d82",
+               ["schema.lua"] = "b5c3648c4eab9e0484309178220fb9c9"
+            },
+            ["ip-restriction"] = {
+               ["handler.lua"] = "4b36ff6c2cf9d296859036948efbdb64",
+               migrations = {
+                  ["cassandra.lua"] = "5b26784f0d72a210adc0df8b9157a378",
+                  ["postgres.lua"] = "b2baf717bf25d05cdfc62b46574f0514"
+               },
+               ["schema.lua"] = "caa10ff8d026f5dedc8dbb92e9e8cffa"
+            },
+            jwt = {
+               ["api.lua"] = "fed4712c8db971d777700665df8b201b",
+               ["asn_sequence.lua"] = "353e1df695c1e212cda60a191b8aa2c1",
+               ["daos.lua"] = "9630b35c36a2ae32e61a378adbe1dcd4",
+               ["handler.lua"] = "b5105e82f28ec1334639d4bfd1ca7145",
+               ["jwt_parser.lua"] = "4f2c2a49a8f9ea9a3ae158f2f4f868e4",
+               migrations = {
+                  ["cassandra.lua"] = "e857f38222b59d678134fdce873630db",
+                  ["postgres.lua"] = "04ce3bdf6cefc7c1c8100367f6862031"
+               },
+               ["schema.lua"] = "e52ed445cf9a8a0c2df85e01e8a22034"
+            },
+            ["key-auth"] = {
+               ["api.lua"] = "362c7a13e16111cd0454c156af7f5c31",
+               ["daos.lua"] = "74fd87e8b4d91f8af07a7f910c2361ac",
+               ["handler.lua"] = "2a710fec2a1a432930fac70bf3c887d4",
+               migrations = {
+                  ["cassandra.lua"] = "0d8ba617b4e97bdeb671056bd230cf2a",
+                  ["postgres.lua"] = "40116a100c6dfa2a1b6c90b43e7d082a"
+               },
+               ["schema.lua"] = "f167063509c9a091f3ebdd2f633a2adc"
+            },
+            ["ldap-auth"] = {
+               ["access.lua"] = "5cad24d03a6bb4465a97d74eb0033fe8",
+               ["asn1.lua"] = "43b783459d6a6e0a371570c632092167",
+               ["handler.lua"] = "ca2eddf9a373e63621a028e79482d69a",
+               ["ldap.lua"] = "0c4ab6aa8bbf979195266c2c5cabbd05",
+               migrations = {
+                  ["cassandra.lua"] = "ef8331afa2eafb2f3222169830cec73e",
+                  ["postgres.lua"] = "ef8331afa2eafb2f3222169830cec73e"
+               },
+               ["schema.lua"] = "3d41fb047fd767c9c2e9e2e823ccd70c"
+            },
+            ["log-serializers"] = {
+               ["basic.lua"] = "07daa4e83670ad5b9ddd5e459b40210a",
+               ["runscope.lua"] = "0ec28b2b30f19c6bf5f914847eab1364"
+            },
+            loggly = {
+               ["handler.lua"] = "9ab1a22a86c54011578971338fc0fa16",
+               ["schema.lua"] = "59a7979edc4bc16b3a82b630292f12eb"
+            },
+            oauth2 = {
+               ["access.lua"] = "94d3d6f72065a73109ec504d56b489e2",
+               ["api.lua"] = "9d26f75156ed64c09f5ed85fd351fa1d",
+               ["daos.lua"] = "e6c0c3e0b109ed7e2d29d0ff7e1f1aae",
+               ["handler.lua"] = "0bc1c451c7d23f85b58d15cfd206f763",
+               migrations = {
+                  ["cassandra.lua"] = "79b02b3ea739627da358ec1403a60342",
+                  ["postgres.lua"] = "55eed2d930d9157c364d916ca5bde016"
+               },
+               ["schema.lua"] = "456d6b0cb1bf505ff1eafc1c4bfe7132"
+            },
+            ["rate-limiting"] = {
+               ["daos.lua"] = "9a1656cb4391aca13777985e6f9a0c9a",
+               ["handler.lua"] = "bae5f3d8cd1e42a7bb2d5a0c84f34d14",
+               migrations = {
+                  ["cassandra.lua"] = "5af1b6d87ed5adb0b77af8571f0e2f07",
+                  ["postgres.lua"] = "afb99d9426ce904ee369d6a7f33522c0"
+               },
+               policies = {
+                  ["cluster.lua"] = "dec0fb4d05b6b94063309de9e2abb768",
+                  ["init.lua"] = "e8d562020e49931cb0ce8d27634f60eb"
+               },
+               ["schema.lua"] = "dad051a15c63e73208193ee519261e21"
+            },
+            ["request-size-limiting"] = {
+               ["handler.lua"] = "4ed2815bf54b584b6c4894083878948f",
+               ["schema.lua"] = "d918387da62f7a0edf8447e95c27d9d8"
+            },
+            ["request-termination"] = {
+               ["handler.lua"] = "0be5d764013856e99b53b0aaa5c239ab",
+               ["schema.lua"] = "5710ea7a0a3ebc2f7d431ebd28c9c923"
+            },
+            ["request-transformer"] = {
+               ["access.lua"] = "3e1c9665293ac43dff417e2640393ce4",
+               ["handler.lua"] = "d0a11afe78e67c5945cac232657da748",
+               migrations = {
+                  ["cassandra.lua"] = "6760ed2355c9daeb44ce45c178804159",
+                  ["postgres.lua"] = "d8bb3900e29dc807b2b921e6789e66c8"
+               },
+               ["schema.lua"] = "15934a7a4cc2d8c25904d4d6a1c4ecca"
+            },
+            ["response-ratelimiting"] = {
+               ["access.lua"] = "22189741b8ae5171e7bca3f6bdeb68d7",
+               ["daos.lua"] = "a6f899c3472f4d68195e4343b5a47b73",
+               ["handler.lua"] = "6f6f60c2992bf966894127dbe3fd6496",
+               ["header_filter.lua"] = "c4247fd826af8ca758fa738b4aede006",
+               ["log.lua"] = "5e66948ba86012cc750277a080162655",
+               migrations = {
+                  ["cassandra.lua"] = "07160ec025687bc756daaf4e0578e1d9",
+                  ["postgres.lua"] = "23c2a4b2e5f343d84a39f81cc371dc46"
+               },
+               policies = {
+                  ["cluster.lua"] = "bd0d35c9b1ca1ae772a61654b7dd27fd",
+                  ["init.lua"] = "7fdaab4dcf7f62d2fcb1786c2d0a709a"
+               },
+               ["schema.lua"] = "3018615477d2cb7f5d6e3dd5bbac3cf2"
+            },
+            ["response-transformer"] = {
+               ["body_transformer.lua"] = "d9a0d8e4832fd4a2bdcbfa3ab6211d34",
+               ["handler.lua"] = "50465f417f024b15de739d3c2e8017a1",
+               ["header_transformer.lua"] = "e92740a5fbc5c015b22b32f55d125a7e",
+               migrations = {
+                  ["cassandra.lua"] = "4ce5a07abde497d7c1885d2788647944",
+                  ["postgres.lua"] = "fb7f7cbed333ccc5ee175717283155dc"
+               },
+               ["schema.lua"] = "ce486e7b0ae92d839f64b1c0b3532db3"
+            },
+            runscope = {
+               ["handler.lua"] = "7be0804bcf13373f5f8d24d045883e26",
+               ["log.lua"] = "d7fbf40fba1a40329155edbaf12daae0",
+               ["schema.lua"] = "e0551cd91f2e2395ba72394536c84f37"
+            },
+            statsd = {
+               ["handler.lua"] = "cb08d984a53d5864af7e530d2a787fb0",
+               migrations = {
+                  ["cassandra.lua"] = "c01f33471233dcbac640bf36687a11e3",
+                  ["postgres.lua"] = "b66289153d14b80f0ed9bd3dd3d69c81"
+               },
+               ["schema.lua"] = "99f3f2b6728824b43b387c9dad7d434a",
+               ["statsd_logger.lua"] = "8d90af0662fa24c9db60357737586ce8"
+            },
+            syslog = {
+               ["handler.lua"] = "d53e16d987999fc28db89b2a985f145f",
+               ["schema.lua"] = "0a73c3784b73b2d957e3b076bb34fedc"
+            },
+            ["tcp-log"] = {
+               ["handler.lua"] = "284fdf5ab843236e9e451d5fe6714569",
+               migrations = {
+                  ["cassandra.lua"] = "cd668b25bd1578539d06a3a7489e76ae",
+                  ["postgres.lua"] = "cd668b25bd1578539d06a3a7489e76ae"
+               },
+               ["schema.lua"] = "4da4a70f373e3b1052984112b8053d11"
+            },
+            ["udp-log"] = {
+               ["handler.lua"] = "0aa808fee31809cd77fdeabb4132187d",
+               ["schema.lua"] = "049a600ad41a1e7148ceb6c9b0d840c2"
+            }
+         },
+         ["singletons.lua"] = "5a1e16e0437328675fa2421b98d37153",
+         templates = {
+            ["kong_defaults.lua"] = "63b69da69816957fcda39e978a6f9823",
+            ["nginx.lua"] = "81aee38b625b4cc5e9ec958930214950",
+            ["nginx_kong.lua"] = "dc6727f045226058e5f590ec525f61d5"
+         },
+         tools = {
+            ["ciphers.lua"] = "345d0194683732507cf5eeada89aef41",
+            ["dns.lua"] = "c9bf18ab902991e3236d8bb8e67606f7",
+            ["ip.lua"] = "1c26b070ce35132d825d829ccecc33f1",
+            ["printable.lua"] = "4243550a9c35482d0b42dab8b45ed496",
+            ["public.lua"] = "cdf6e0b568c366df4d1b5f1bb66778d5",
+            ["responses.lua"] = "81f8ab63bd709ca9603dc450a34835e1",
+            ["timestamp.lua"] = "28cad6d81508619c1b3bbc7db27c2598",
+            ["utils.lua"] = "eea6faa4003dce15af0b3f2e3df7584b"
+         },
+         vendor = {
+            ["classic.lua"] = "b775f167e5b414bfff7c6c6e273391ec"
+         }
+      }
+   }
+}

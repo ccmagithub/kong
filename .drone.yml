@@ -25,8 +25,7 @@ pipeline:
       - cd build
       - docker build -t "API_GW:${VERSION}" --network="host" .
       - export TIMESTAMP=$(date +"%Y-%m-%d_%H%M")
-      - export REPO=$(git rev-parse --short HEAD)
-      - docker save API_GW:${VERSION} > /release/API_Gateway_${VERSION}_${REPO}_${TIMESTAMP}.tar
+      - docker save API_GW:${VERSION} > /release/${TIMESTAMP}_API_Gateway_${VERSION}_${DRONE_BRANCH}_${DRONE_COMMIT}.tar
   delete-test-env:
     image: michalpodeszwa/docker-compose:latest
     volumes:

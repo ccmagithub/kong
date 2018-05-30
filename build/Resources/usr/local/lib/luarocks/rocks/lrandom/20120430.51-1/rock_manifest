@@ -1,0 +1,9 @@
+rock_manifest = {
+   doc = {
+      README = "b62f6a1327b763abc23536a55950af2a"
+   },
+   lib = {
+      ["random.so"] = "602df17f1a99ad1a778b474369e4d445"
+   },
+   ["lrandom-20120430.51-1.rockspec"] = "ba56900bbbfaab1471d3be332d5c1134"
+}

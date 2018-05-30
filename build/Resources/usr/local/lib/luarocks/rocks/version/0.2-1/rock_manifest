@@ -1,0 +1,13 @@
+rock_manifest = {
+   doc = {
+      ["index.html"] = "abbdbe3089676dbe08f9aeb789c8fb2c",
+      ["ldoc.css"] = "f9ac1f28d976ae7c42bfabc154196d68",
+      topics = {
+         ["readme.md.html"] = "269f749bc50377db28f9653cccb1b140"
+      }
+   },
+   lua = {
+      ["version.lua"] = "80ec6d546f39880eea252170811a6931"
+   },
+   ["version-0.2-1.rockspec"] = "2e31b23ef03521fb08c2f15674359aef"
+}
