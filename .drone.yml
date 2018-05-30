@@ -1,0 +1,36 @@
+matrix:  
+  VERSION:
+    - 0.1.0
+pipeline:
+  # build env
+  run-tests-in-compose:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - ./drone_build/drone-run-test.sh
+    when:
+      event: [push, pull_request, tag, deployment]
+      branch: gemini_developer
+  copy-code:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/gemini/drone/release:/release/
+    commands:
+      - docker exec kong curl http://localhost:8001/consumers_test/
+      - docker cp kong kong:/usr/local/share/lua/5.1
+      - docker exec kong kong reload
+      - cp -r kong build/Resources/usr/local/share/lua/5.1
+      - cd build
+      - docker build -t "API_GW:${VERSION}" --network="host" .
+      - export TIMESTAMP=$(date +"%Y-%m-%d_%H%M")
+      - export REPO=$(git rev-parse --short HEAD)
+      - docker save API_GW:${VERSION} > /release/API_Gateway_${VERSION}_${REPO}_${TIMESTAMP}.tar
+  delete-test-env:
+    image: michalpodeszwa/docker-compose:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker exec kong curl http://localhost:8001/consumers_test/
+      - ./drone_build/drone-delete-test.sh
