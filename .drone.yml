@@ -34,8 +34,7 @@ pipeline:
       - cp -r kong build/Resources/usr/local/share/lua/5.1
       - cd build
       - docker build -t "apigw:${VERSION}" --network="host" .
-      - export TIMESTAMP=$(date +"%Y-%m-%d_%H%M")
-      - docker save apigw:${VERSION} > /release/${TIMESTAMP}_API_Gateway_${VERSION}_${DRONE_BRANCH}_${DRONE_COMMIT}.tar
+      - docker save apigw:${VERSION} > /release/${DRONE_BUILD_CREATED}_API_Gateway_${VERSION}_${DRONE_BRANCH}_${DRONE_COMMIT}.tar
     when:
       event: [push, tag, deployment]
       branch: gemini_developer
