@@ -8,7 +8,10 @@ return {
     end,
     
     -- assign groupname into acls with key_id (add row data to acls)
-    POST = function(self, dao_factory)
+    POST = function(self, dao_factory, helpers)
+      if self.params.group:lower() == "group_admin" then
+        return helpers.responses.send_HTTP_METHOD_NOT_ALLOWED("Can not assign key into group admin")
+      end
       crud.post(self.params, dao_factory.acls)
     end
   },

@@ -11,7 +11,8 @@ return {
     end,
 
     POST = function(self, dao_factory)
-      -- function post_consumer_enable_key will insert two different table (consumers & api_key),
+      -- function post_consumer_enable_key will insert three different table 
+      -- Related Table : consumers & api_key & acls,
       -- so we post "dao_factory" params instead of "dao_factory.consumers"
       crud.post_consumer_enable_key(self.params, dao_factory)      
     end

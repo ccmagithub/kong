@@ -638,6 +638,7 @@ return {
         consumer_id uuid,
         expired_time timestamp,
         created_at timestamp,
+        main_key boolean,
         PRIMARY KEY (id)
       );
 

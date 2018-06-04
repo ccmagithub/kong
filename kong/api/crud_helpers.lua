@@ -202,7 +202,7 @@ function _M.post(params, dao_collection, post_process)
   end
 end
 
--- specific for when adding consumer, auto add key for this consumer 
+-- specific for when adding consumer, auto add key & add admin group for this consumer 
 function _M.post_consumer_enable_key(params, dao_factory, post_process)
   -- insert to consumers table
   local consumer_data, err = dao_factory.consumers:insert(params)
@@ -211,7 +211,9 @@ function _M.post_consumer_enable_key(params, dao_factory, post_process)
   end
 
   local apikeyparams = {
-    consumer_id = consumer_data.id
+    consumer_id = consumer_data.id,
+    -- only when adding consumer , main_key = true
+    main_key = true
   }
   -- insert to api_key table
   local apikey_data, err = dao_factory.api_key:insert(apikeyparams)
@@ -233,8 +235,37 @@ function _M.post_consumer_enable_key(params, dao_factory, post_process)
     return app_helpers.yield_error(err)
   end
 
-  -- After adding both table successfully , add key column into return data
-  -- let consumer knows which key they can use
+  -- when adding consumer, not only enable api_key ,
+  -- but also add this main key link to default admin service group (insert acls DB table)  
+  local admin_acl_params = {
+    group = "group_admin",
+    key_id = apikey_data.id
+  }
+  local admin_acl_ok, err= dao_factory.acls:insert(admin_acl_params)
+
+  retrytime = 0 -- set retrytime back to 0
+  while err and retrytime < 3 do
+    apikey_data, err = dao_factory.acls:insert(admin_acl_params)
+    retrytime = retrytime + 1     
+  end
+
+  -- if it still error after retrying 3 times, delete this consumer & key sync
+  if err then
+    local ok, err_t = dao_factory.consumers:delete({ id = consumer_data.id })
+    if err_t then
+      return app_helpers.yield_error(err_t) 
+    end
+
+    ok, err_t = dao_factory.api_key:delete({ id = apikey_data.id })
+    if err_t then
+      return app_helpers.yield_error(err_t) 
+    end
+
+    return app_helpers.yield_error(err)
+  end
+
+  -- After adding these three table successfully , add key column into return data
+  -- let consumer knows which key(mainkey) they can use
   local return_data = consumer_data
   return_data.key = apikey_data.key
 

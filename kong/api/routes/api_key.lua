@@ -7,6 +7,7 @@ return {
     end,
 
     POST = function(self, dao_factory)
+      self.params.main_key = false
       crud.post(self.params, dao_factory.api_key)
     end
   },
@@ -28,7 +29,11 @@ return {
       crud.patch(self.params, dao_factory.api_key, self.api_key)
     end,
 
-    DELETE = function(self, dao_factory)
+    DELETE = function(self, dao_factory, helpers)
+      -- check if this key is main_key, can not be delete
+      if self.api_key.main_key == true then
+        return helpers.responses.send_HTTP_METHOD_NOT_ALLOWED("Main key cannot be deleted")
+      end
       crud.delete(self.api_key, dao_factory.api_key)
     end
   },

@@ -20,5 +20,6 @@ return {
     consumer_id = {type = "id", immutable = true, required = true, func = check_consumer_id},
     created_at = {type = "timestamp", immutable = true, dao_insert_value = true},
     expired_time = {type = "expiredtimestamp", dao_insert_value = true},
+    main_key = {type = "boolean", immutable = true}
   },
 }
