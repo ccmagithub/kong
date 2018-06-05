@@ -10,7 +10,7 @@ pipeline:
       - ./drone_build/drone-run-test.sh
     when:
       event: [push, tag, deployment]
-      branch: gemini_developer
+      branch: gemini_drone_test
 
 
   test:
