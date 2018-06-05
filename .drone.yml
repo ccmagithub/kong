@@ -22,7 +22,7 @@ pipeline:
       - docker exec kong curl http://localhost:8001/
     when:
       event: [push, tag, deployment]
-      branch: gemini_developer
+      branch: gemini_drone_test
 
 
   build:
@@ -37,7 +37,7 @@ pipeline:
       - docker save apigw:${VERSION} > /release/${DRONE_BUILD_CREATED}_API_Gateway_${VERSION}_${DRONE_BRANCH}_${DRONE_COMMIT}.tar
     when:
       event: [push, tag, deployment]
-      branch: gemini_developer
+      branch: gemini_drone_test
 
 
   env_destroy:
@@ -48,4 +48,4 @@ pipeline:
       - ./drone_build/drone-delete-test.sh
     when:
       event: [push, tag, deployment]
-      branch: gemini_developer
+      branch: gemini_drone_test
